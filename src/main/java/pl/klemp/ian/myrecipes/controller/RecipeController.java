@@ -1,4 +1,4 @@
-package pl.klemp.ian.myrecipes.api;
+package pl.klemp.ian.myrecipes.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/recipes")
 @RestController
-public class RecipeAPI {
+public class RecipeController {
 
     private final RecipeService recipeService;
 

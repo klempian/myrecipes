@@ -2,7 +2,7 @@ package pl.klemp.ian.myrecipes.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.klemp.ian.myrecipes.exception.ResourceNotFoundException;
+import pl.klemp.ian.myrecipes.exception.EntityNotFoundException;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
 import pl.klemp.ian.myrecipes.repository.RecipeRepository;
@@ -23,7 +23,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe findById(Long id) {
-        return recipeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recipe", id));
+        return recipeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Recipe.class, "id", id.toString()));
     }
 
     @Override
