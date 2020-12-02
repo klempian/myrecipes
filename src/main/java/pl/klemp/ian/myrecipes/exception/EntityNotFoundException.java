@@ -1,33 +1,18 @@
 package pl.klemp.ian.myrecipes.exception;
 
-import org.springframework.util.StringUtils;
+import me.alidg.errors.annotation.ExceptionMapping;
+import me.alidg.errors.annotation.ExposeAsArg;
+import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+@ExceptionMapping(statusCode = HttpStatus.NOT_FOUND, errorCode = "entity.not_found")
+public class EntityNotFoundException extends RuntimeException{
+    @ExposeAsArg(value = 0, name = "entity name")
+    private final String entityName;
+    @ExposeAsArg(value = 1, name = "entity id")
+    private final Long entityId;
 
-public class EntityNotFoundException extends RuntimeException {
-
-    public EntityNotFoundException(Class clazz, String... searchParamsMap) {
-        super(EntityNotFoundException.generateMessage(clazz.getSimpleName(), toMap(searchParamsMap)));
-    }
-
-    private static String generateMessage(String entity, Map<String, String> searchParams) {
-        String params = searchParams.entrySet().stream()
-                .map(e -> e.getKey() + " = " + e.getValue())
-                .collect(Collectors.joining("& "));
-
-        return StringUtils.capitalize(entity) + " was not found for " + params;
-    }
-
-    private static Map<String, String> toMap(String... entries) {
-        if (entries.length % 2 == 1) throw new IllegalArgumentException("Invalid entries");
-
-        return IntStream.range(0, entries.length / 2).map(i -> i * 2)
-                .collect(HashMap::new,
-                        (m, i) -> m.put(entries[i], entries[i+1]),
-                        Map::putAll
-        );
+    public EntityNotFoundException(Class clazz, Long id) {
+        this.entityName = clazz.getSimpleName();
+        this.entityId = id;
     }
 }

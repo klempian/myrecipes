@@ -23,7 +23,7 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/add")
+    @PostMapping(value = "/add", consumes = "application/json")
     public Recipe create(@RequestBody @Valid Recipe recipe) {
         return recipeService.save(recipe);
     }
@@ -39,6 +39,4 @@ public class RecipeController {
     public List<Recipe> getAllRecipes() {
         return recipeService.findAll();
     }
-
-
 }

@@ -25,7 +25,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "property.required")
     private String name;
 
     @Convert(converter = StringListConverter.class)
@@ -47,7 +47,9 @@ public class Recipe {
     private int totalTime;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "recipes_keywords", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "keyword_id"))
+    @JoinTable(name = "recipes_keywords",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "keyword_id"))
     private List<Keyword> keywords;
 
     private String recipeYield;
