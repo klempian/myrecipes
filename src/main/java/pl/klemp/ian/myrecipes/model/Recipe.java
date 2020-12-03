@@ -3,6 +3,7 @@ package pl.klemp.ian.myrecipes.model;
 import lombok.Data;
 import pl.klemp.ian.myrecipes.converter.StringListConverter;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,13 +26,15 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "property.required")
+    @NotNull
     private String name;
 
+    @Column(name = "images")
     @Convert(converter = StringListConverter.class)
-    private List<String> images;
+    private List<String> image;
 
     @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
     private Author author;
 
     private LocalDate datePublished;
@@ -60,8 +63,9 @@ public class Recipe {
 
     private int calories;
 
+    @Column(name = "recipe_ingredients")
     @Convert(converter = StringListConverter.class)
-    private List<String> recipeIngredients;
+    private List<String> recipeIngredient;
 
     @Convert(converter = StringListConverter.class)
     private List<String> recipeInstructions;
