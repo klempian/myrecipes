@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class NutritionDto {
 
-    private String calories;
+    private int calories;
 
-    public NutritionDto(String calories) {
+    public NutritionDto(int calories) {
         this.calories = calories;
     }
 }

@@ -13,10 +13,6 @@ import java.util.Map;
 @Setter
 public class RecipeDto {
 
-//    public RecipeDto() {
-//        this.nutrition = new NutritionDto();
-//    }
-
     @NotNull(message = "property.required")
     private String name;
 

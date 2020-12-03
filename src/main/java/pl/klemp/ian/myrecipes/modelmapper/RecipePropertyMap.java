@@ -21,7 +21,7 @@ public class RecipePropertyMap extends PropertyMap<Recipe, RecipeDto> {
     }
 
     Converter<Integer, NutritionDto> convertCalories = mappingContext ->
-            new NutritionDto(mappingContext.getSource() + " calories");
+            new NutritionDto(mappingContext.getSource());
 
     Converter<List<String>, List<Map<Integer, String>>> convertRecipeInstruction = mappingContext -> {
         AtomicInteger atomicInteger = new AtomicInteger();
