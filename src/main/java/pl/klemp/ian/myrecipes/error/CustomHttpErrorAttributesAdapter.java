@@ -17,6 +17,27 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+* Implementation of {@link HttpErrorAttributesAdapter}
+* converts given {@link HttpError} to a {@link Map} like following:
+ * {
+ *     "version": "app_version",
+ *     "timestamp": "yyyy-MM-dd HH:mm:ss",
+ *     "error": {
+ *         "code": http_status_code,
+ *         "errors": [
+ *             {
+ *                 "path": "the_path (optional)",
+ *                 "code": "the_app_error_code",
+ *                 "name": "value" (optional)
+ *                 ..
+ *                 "message": "the_message"
+ *             }
+ *         ]
+ *     }
+ * }
+*/
+
 @Component
 public class CustomHttpErrorAttributesAdapter implements HttpErrorAttributesAdapter {
 
