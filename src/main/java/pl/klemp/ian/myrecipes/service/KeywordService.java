@@ -13,7 +13,9 @@ public interface KeywordService {
 
     List<Keyword> findAll();
 
-    Keyword findByName(String name);
+    Optional<Keyword> findByName(String name);
+
+    Keyword findByNameOrCreate(String name);
 
     void delete(Keyword keyword);
 }

@@ -13,7 +13,9 @@ public interface CategoryService {
 
     List<Category> findAll();
 
-    Category findByName(String name);
+    Optional<Category> findByName(String name);
+
+    Category findByNameOrCreate(String name);
 
     void delete(Category category);
 }

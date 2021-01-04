@@ -13,9 +13,11 @@ public interface AuthorService {
 
     List<Author> findAll();
 
-    Author findByName(String name);
+    Optional<Author> findByName(String name);
 
-    Author findByUrl(String url);
+    Optional<Author> findByUrl(String url);
+
+    Author findByUrlOrNameOrCreate(String url, String name);
 
     void delete(Author author);
 }

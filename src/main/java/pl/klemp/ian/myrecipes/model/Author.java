@@ -20,4 +20,12 @@ public class Author {
     private String name;
 
     private String url;
+
+    public Author() {
+    }
+
+    public Author(String name, String url) {
+        this.name = name;
+        this.url = url;
+    }
 }

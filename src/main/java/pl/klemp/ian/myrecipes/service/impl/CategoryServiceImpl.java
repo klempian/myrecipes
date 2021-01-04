@@ -31,9 +31,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findByName(String name) {
+    public Optional<Category> findByName(String name) {
         return categoryRepository.findByName(name);
     }
+
+    @Override
+    public Category findByNameOrCreate(String name) { return categoryRepository.findByName(name)
+            .orElseGet(() -> save(new Category(name))); }
 
     @Override
     public void delete(Category category) {

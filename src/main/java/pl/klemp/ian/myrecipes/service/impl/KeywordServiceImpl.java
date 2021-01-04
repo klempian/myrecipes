@@ -31,9 +31,13 @@ public class KeywordServiceImpl implements KeywordService {
     }
 
     @Override
-    public Keyword findByName(String name) {
+    public Optional<Keyword> findByName(String name) {
         return keywordRepository.findByName(name);
     }
+
+    @Override
+    public Keyword findByNameOrCreate(String name) { return keywordRepository.findByName(name)
+            .orElseGet(() -> save(new Keyword(name))); }
 
     @Override
     public void delete(Keyword keyword) {

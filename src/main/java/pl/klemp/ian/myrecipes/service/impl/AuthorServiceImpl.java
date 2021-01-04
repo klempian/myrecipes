@@ -31,14 +31,18 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author findByName(String name) {
+    public Optional<Author> findByName(String name) {
         return authorRepository.findByName(name);
     }
 
     @Override
-    public Author findByUrl(String url) {
+    public Optional<Author> findByUrl(String url) {
         return authorRepository.findByUrl(url);
     }
+
+    @Override
+    public Author findByUrlOrNameOrCreate(String url, String name) { return authorRepository.findByUrlOrName(url, name)
+            .orElseGet(() -> save(new Author(name, url))); }
 
     @Override
     public void delete(Author author) {

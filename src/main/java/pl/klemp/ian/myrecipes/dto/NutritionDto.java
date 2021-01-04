@@ -9,6 +9,9 @@ public class NutritionDto {
 
     private int calories;
 
+    public NutritionDto() {
+    }
+
     public NutritionDto(int calories) {
         this.calories = calories;
     }

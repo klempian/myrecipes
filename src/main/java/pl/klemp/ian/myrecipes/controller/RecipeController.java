@@ -27,7 +27,8 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/add", consumes = "application/json")
-    public Recipe create(@RequestBody @Valid Recipe recipe) {
+    public Recipe create(@RequestBody @Valid RecipeDto recipeDto) {
+        Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
         return recipeService.save(recipe);
     }
 
