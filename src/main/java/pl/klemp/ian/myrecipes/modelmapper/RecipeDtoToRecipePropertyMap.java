@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class RecipeDtoPropertyMap extends PropertyMap<RecipeDto, Recipe> {
+public class RecipeDtoToRecipePropertyMap extends PropertyMap<RecipeDto, Recipe> {
 
     private CategoryService categoryService;
     private AuthorService authorService;
     private KeywordService keywordService;
 
-    public RecipeDtoPropertyMap(CategoryService categoryService, AuthorService authorService, KeywordService keywordService) {
+    public RecipeDtoToRecipePropertyMap(CategoryService categoryService, AuthorService authorService, KeywordService keywordService) {
         this.categoryService = categoryService;
         this.authorService = authorService;
         this.keywordService = keywordService;

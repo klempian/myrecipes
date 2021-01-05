@@ -2,6 +2,7 @@ package pl.klemp.ian.myrecipes.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.klemp.ian.myrecipes.exception.EntityNotFoundException;
 import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.repository.CategoryRepository;
 import pl.klemp.ian.myrecipes.service.CategoryService;
@@ -21,8 +22,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> findById(Long id) {
-        return categoryRepository.findById(id);
+    public Category findById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Category.class, id));
     }
 
     @Override

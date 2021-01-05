@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class RecipePropertyMap extends PropertyMap<Recipe, RecipeDto> {
+public class RecipeToRecipeDtoPropertyMap extends PropertyMap<Recipe, RecipeDto> {
     @Override
     protected void configure() {
         map().setRecipeCategory(source.getRecipeCategory().getName());

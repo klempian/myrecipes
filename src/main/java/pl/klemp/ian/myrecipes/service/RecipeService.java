@@ -13,7 +13,9 @@ public interface RecipeService {
 
     List<Recipe> findAll();
 
-    List<Recipe> findByKeyword(Keyword keyword);
+    List<Recipe> findAllByKeyword(Keyword keyword);
+
+    List<Recipe> findAllByRecipeCategoryId(Long id);
 
     void delete(Recipe recipe);
 }

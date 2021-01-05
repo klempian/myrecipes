@@ -23,8 +23,9 @@ public class ModelMapperConfig {
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);
 
-        modelMapper.addMappings(new RecipePropertyMap());
-        modelMapper.addMappings(new RecipeDtoPropertyMap(categoryService, authorService, keywordService));
+        modelMapper.addMappings(new RecipeToRecipeDtoPropertyMap());
+        modelMapper.addMappings(new RecipeDtoToRecipePropertyMap(categoryService, authorService, keywordService));
+        modelMapper.addMappings(new RecipeToRecipeThumbnailDtoPropertyMap());
 
         return modelMapper;
     }

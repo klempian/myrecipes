@@ -29,6 +29,7 @@ public class Recipe {
     @NotNull
     private String name;
 
+    @NotNull
     @Column(name = "images")
     @Convert(converter = StringListConverter.class)
     private List<String> image;
