@@ -17,5 +17,5 @@ public interface RecipeService {
 
     List<Recipe> findAllByRecipeCategoryId(Long id);
 
-    void delete(Recipe recipe);
+    void delete(Long id);
 }

@@ -43,7 +43,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void delete(Recipe recipe) {
-        recipeRepository.delete(recipe);
+    public void delete(Long id) {
+        recipeRepository.delete(findById(id));
     }
 }
