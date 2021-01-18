@@ -3,23 +3,28 @@ package pl.klemp.ian.myrecipes.controller;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.klemp.ian.myrecipes.dto.RecipeDto;
 import pl.klemp.ian.myrecipes.dto.RecipeThumbnailDto;
+import pl.klemp.ian.myrecipes.dto.RecipeUpdateDto;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
 import pl.klemp.ian.myrecipes.service.KeywordService;
 import pl.klemp.ian.myrecipes.service.RecipeService;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +43,19 @@ public class RecipeController {
     @PostMapping(value = "/add", consumes = "application/json")
     public Recipe create(@RequestBody @Valid RecipeDto recipeDto) {
         Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
+//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{recipeId}").buildAndExpand(recipeId).toUri();
         return recipeService.save(recipe);
+    }
+
+    @PutMapping(value = "/{recipeId}", consumes = "application/json")
+    public ResponseEntity<Object> update(@PathVariable Long recipeId, @RequestBody @Valid RecipeUpdateDto recipeUpdateDto) {
+        Recipe recipe = recipeService.findById(recipeId);
+        recipe.setImage(null);
+        recipe.setRecipeIngredient(null);
+        modelMapper.map(recipeUpdateDto, recipe);
+        recipeService.save(recipe);
+
+        return ResponseEntity.accepted().build();
     }
 
     @ResponseStatus(HttpStatus.OK)

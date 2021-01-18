@@ -25,6 +25,7 @@ public class ModelMapperConfig {
 
         modelMapper.addMappings(new RecipeToRecipeDtoPropertyMap());
         modelMapper.addMappings(new RecipeDtoToRecipePropertyMap(categoryService, authorService, keywordService));
+        modelMapper.addMappings(new RecipeUpdateDtoToRecipePropertyMap(categoryService, keywordService));
         modelMapper.addMappings(new RecipeToRecipeThumbnailDtoPropertyMap());
 
         return modelMapper;

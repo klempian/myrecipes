@@ -3,7 +3,6 @@ package pl.klemp.ian.myrecipes.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.klemp.ian.myrecipes.exception.EntityNotFoundException;
-import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
 import pl.klemp.ian.myrecipes.repository.RecipeRepository;
