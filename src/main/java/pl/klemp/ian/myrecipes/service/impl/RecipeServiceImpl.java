@@ -9,6 +9,7 @@ import pl.klemp.ian.myrecipes.repository.RecipeRepository;
 import pl.klemp.ian.myrecipes.service.RecipeService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -17,12 +18,12 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
 
     @Override
-    public Recipe save(Recipe recipe) {
-        return recipeRepository.save(recipe);
+    public UUID save(Recipe recipe) {
+        return recipeRepository.save(recipe).getId();
     }
 
     @Override
-    public Recipe findById(Long id) {
+    public Recipe findById(UUID id) {
         return recipeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Recipe.class, id));
     }
 
@@ -37,12 +38,12 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> findAllByRecipeCategoryId(Long id) {
+    public List<Recipe> findAllByRecipeCategoryId(UUID id) {
         return recipeRepository.findAllByRecipeCategoryId(id);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         recipeRepository.delete(findById(id));
     }
 }

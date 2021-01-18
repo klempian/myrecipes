@@ -28,6 +28,7 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -39,16 +40,17 @@ public class RecipeController {
     private final KeywordService keywordService;
     private final ModelMapper modelMapper;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/add", consumes = "application/json")
-    public Recipe create(@RequestBody @Valid RecipeDto recipeDto) {
+    @PostMapping(value = "/", consumes = "application/json")
+    public ResponseEntity<Object> create(@RequestBody @Valid RecipeDto recipeDto) {
         Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
-//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{recipeId}").buildAndExpand(recipeId).toUri();
-        return recipeService.save(recipe);
+        UUID recipeId = recipeService.save(recipe);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{recipeId}").buildAndExpand(recipeId).toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(value = "/{recipeId}", consumes = "application/json")
-    public ResponseEntity<Object> update(@PathVariable Long recipeId, @RequestBody @Valid RecipeUpdateDto recipeUpdateDto) {
+    public ResponseEntity<Object> update(@PathVariable UUID recipeId, @RequestBody @Valid RecipeUpdateDto recipeUpdateDto) {
         Recipe recipe = recipeService.findById(recipeId);
         recipe.setImage(null);
         recipe.setRecipeIngredient(null);
@@ -60,14 +62,14 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{recipeId}")
-    public RecipeDto getById(@PathVariable Long recipeId) {
+    public RecipeDto getById(@PathVariable UUID recipeId) {
         Recipe recipe = recipeService.findById(recipeId);
         return modelMapper.map(recipe, RecipeDto.class);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/category")
-    public List<RecipeThumbnailDto> getByCategory(@RequestParam Long id) {
+    public List<RecipeThumbnailDto> getByCategory(@RequestParam UUID id) {
 
         return recipeService.findAllByRecipeCategoryId(id).stream()
                 .map(recipe -> modelMapper.map(recipe, RecipeThumbnailDto.class))
@@ -86,13 +88,16 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/all")
-    public List<Recipe> getAllRecipes() {
-        return recipeService.findAll();
+    public List<RecipeThumbnailDto> getAllRecipes() {
+
+        return recipeService.findAll().stream()
+                .map(recipe -> modelMapper.map(recipe, RecipeThumbnailDto.class))
+                .collect(Collectors.toList());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public void deleteRecipeById(@PathVariable Long id) {
+    public void deleteRecipeById(@PathVariable UUID id) {
         recipeService.delete(id);
     }
 }

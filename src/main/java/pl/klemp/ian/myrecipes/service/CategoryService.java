@@ -4,12 +4,13 @@ import pl.klemp.ian.myrecipes.model.Category;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface CategoryService {
 
     Category save(Category category);
 
-    Category findById(Long id);
+    Category findById(UUID id);
 
     List<Category> findAll();
 
