@@ -52,8 +52,6 @@ public class RecipeController {
     @PutMapping(value = "/{recipeId}", consumes = "application/json")
     public ResponseEntity<Object> update(@PathVariable UUID recipeId, @RequestBody @Valid RecipeUpdateDto recipeUpdateDto) {
         Recipe recipe = recipeService.findById(recipeId);
-        recipe.setImage(null);
-        recipe.setRecipeIngredient(null);
         modelMapper.map(recipeUpdateDto, recipe);
         recipeService.save(recipe);
 

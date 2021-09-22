@@ -2,6 +2,7 @@ package pl.klemp.ian.myrecipes.modelmapper;
 
 import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.spi.MappingContext;
 import pl.klemp.ian.myrecipes.dto.RecipeDto;
 import pl.klemp.ian.myrecipes.dto.RecipeUpdateDto;
 import pl.klemp.ian.myrecipes.model.Author;
@@ -33,6 +34,8 @@ public class RecipeUpdateDtoToRecipePropertyMap extends PropertyMap<RecipeUpdate
         using(convertRecipeInstruction).map(source.getRecipeInstructions()).setRecipeInstructions(null);
         using(convertRecipeCategory).map(source.getRecipeCategory()).setRecipeCategory(null);
         using(convertKeywords).map(source.getKeywords()).setKeywords(null);
+        using(convertImages).map(source.getImage()).setImage(null);
+        using(convertIngredients).map(source.getRecipeIngredient()).setRecipeIngredient(null);
     }
 
     Converter<List<Map<Integer, String>>, List<String>> convertRecipeInstruction = mappingContext ->
@@ -55,4 +58,8 @@ public class RecipeUpdateDtoToRecipePropertyMap extends PropertyMap<RecipeUpdate
 
       return keywordList;
     };
+
+    Converter<List<String>, List<String>> convertImages = MappingContext::getSource;
+
+    Converter<List<String>, List<String>> convertIngredients = MappingContext::getSource;
 }
