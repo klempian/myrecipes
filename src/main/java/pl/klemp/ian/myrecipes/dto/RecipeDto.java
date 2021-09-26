@@ -16,6 +16,7 @@ public class RecipeDto {
     @NotNull(message = "property.required")
     private String name;
 
+    @NotNull(message = "property.required")
     private List<String> image;
 
     private Author author;

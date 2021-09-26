@@ -1,5 +1,6 @@
 package pl.klemp.ian.myrecipes.modelmapper;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import pl.klemp.ian.myrecipes.dto.NutritionDto;
@@ -15,9 +16,9 @@ import java.util.stream.Collectors;
 public class RecipeToRecipeDtoPropertyMap extends PropertyMap<Recipe, RecipeDto> {
     @Override
     protected void configure() {
-        map().setRecipeCategory(source.getRecipeCategory().getName());
-        using(convertCalories).map(source.getCalories()).setNutrition(null);
-        using(convertRecipeInstruction).map(source.getRecipeInstructions()).setRecipeInstructions(null);
+        when(Conditions.isNotNull()).map().setRecipeCategory(source.getRecipeCategory().getName());
+        when(Conditions.isNotNull()).using(convertCalories).map(source.getCalories()).setNutrition(null);
+        when(Conditions.isNotNull()).using(convertRecipeInstruction).map(source.getRecipeInstructions()).setRecipeInstructions(null);
     }
 
     Converter<Integer, NutritionDto> convertCalories = mappingContext ->
