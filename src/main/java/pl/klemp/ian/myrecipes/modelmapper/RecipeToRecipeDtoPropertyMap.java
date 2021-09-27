@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 public class RecipeToRecipeDtoPropertyMap extends PropertyMap<Recipe, RecipeDto> {
     @Override
     protected void configure() {
-        when(Conditions.isNotNull()).map().setRecipeCategory(source.getRecipeCategory().getName());
-        when(Conditions.isNotNull()).using(convertCalories).map(source.getCalories()).setNutrition(null);
-        when(Conditions.isNotNull()).using(convertRecipeInstruction).map(source.getRecipeInstructions()).setRecipeInstructions(null);
+        map().setRecipeCategory(source.getRecipeCategory().getName());
+        using(convertCalories).map(source.getCalories()).setNutrition(null);
+        using(convertRecipeInstruction).map(source.getRecipeInstructions()).setRecipeInstructions(null);
     }
 
     Converter<Integer, NutritionDto> convertCalories = mappingContext ->
