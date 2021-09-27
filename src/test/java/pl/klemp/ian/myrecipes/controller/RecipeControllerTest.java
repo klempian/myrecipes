@@ -37,7 +37,7 @@ public class RecipeControllerTest {
     @MockBean
     private RecipeService recipeService;
 
-    private UUID uuid = UUID.randomUUID();
+    private final UUID uuid = UUID.randomUUID();
 
     @BeforeEach
     public void setup() {
@@ -60,7 +60,7 @@ public class RecipeControllerTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(redirectedUrlPattern("http://*/api/recipes/" + uuid));
+                .andExpect(redirectedUrlPattern("https://*/api/recipes/" + uuid));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class RecipeControllerTest {
         when(recipeService.findById(Mockito.any())).thenReturn(mockRecipe);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/recipes/" + uuid.toString())
+                .get("/api/recipes/" + uuid)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
