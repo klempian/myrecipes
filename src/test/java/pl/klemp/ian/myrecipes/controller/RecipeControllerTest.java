@@ -1,6 +1,7 @@
 package pl.klemp.ian.myrecipes.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,23 +36,26 @@ public class RecipeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @MockBean
     private RecipeService recipeService;
 
     private final UUID uuid = UUID.randomUUID();
+    private final RecipeDto mockRecipeDto = new RecipeDto();
+    private final Recipe mockRecipe = new Recipe();
 
     @BeforeEach
     public void setup() {
+        mockRecipeDto.setName("New test recipe name");
+        mockRecipeDto.setImage(new ArrayList<>());
 
+        mockRecipe.setName("Test Recipe name");
     }
 
     @Test
     public void create_success() throws Exception {
-        RecipeDto mockRecipeDto = new RecipeDto();
-        mockRecipeDto.setName("");
-        mockRecipeDto.setImage(new ArrayList<>());
-
-        ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(mockRecipeDto);
 
         when(recipeService.save(Mockito.any())).thenReturn(uuid);
@@ -60,13 +65,27 @@ public class RecipeControllerTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(redirectedUrlPattern("https://*/api/recipes/" + uuid));
+                .andExpect(redirectedUrlPattern("http*://*/api/recipes/" + uuid));
+    }
+
+    @Test
+    public void update_success() throws Exception {
+        String json = objectMapper.writeValueAsString(mockRecipeDto);
+
+        when(recipeService.findById(Mockito.any())).thenReturn(mockRecipe);
+        when(recipeService.save(Mockito.any())).thenReturn(uuid);
+
+        mockMvc.perform(put("/api/recipes/"+ uuid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted());
+
+        Assertions.assertEquals(mockRecipe.getName(), mockRecipeDto.getName());
     }
 
     @Test
     public void getById_success() throws Exception {
-        Recipe mockRecipe = new Recipe();
-        mockRecipe.setName("Test Recipe name");
 
         when(recipeService.findById(Mockito.any())).thenReturn(mockRecipe);
 
