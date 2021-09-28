@@ -26,8 +26,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,61 +46,76 @@ public class RecipeControllerTest {
     private KeywordService keywordService;
 
     private final UUID uuid = UUID.randomUUID();
-    private final RecipeDto mockRecipeDto = new RecipeDto();
+    private static final RecipeDto mockRecipeDto = new RecipeDto();
     private final Recipe mockRecipe = new Recipe();
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    static void setupAll() {
         mockRecipeDto.setName("New test recipe name");
-
-        mockRecipe.setName("Test Recipe name");
     }
 
-    @Test
-    public void create_success() throws Exception {
-        String json = objectMapper.writeValueAsString(mockRecipeDto);
+    @Nested
+    @DisplayName("Single Recipe tests")
+    class SingleRecipeTests {
 
-        when(recipeService.save(Mockito.any())).thenReturn(uuid);
+        @BeforeEach
+        public void setup() {
+            mockRecipe.setName("Test Recipe name");
+        }
 
-        mockMvc.perform(post("/api/recipes/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(redirectedUrlPattern("http*://*/api/recipes/" + uuid));
-    }
+        @Test
+        public void create_success() throws Exception {
+            String json = objectMapper.writeValueAsString(mockRecipeDto);
 
-    @Test
-    public void update_success() throws Exception {
-        String json = objectMapper.writeValueAsString(mockRecipeDto);
+            when(recipeService.save(Mockito.any())).thenReturn(uuid);
 
-        when(recipeService.findById(uuid)).thenReturn(mockRecipe);
-        when(recipeService.save(Mockito.any())).thenReturn(uuid);
+            mockMvc.perform(post("/api/recipes/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isCreated())
+                    .andExpect(redirectedUrlPattern("http*://*/api/recipes/" + uuid)
+                    );
+        }
 
-        mockMvc.perform(put("/api/recipes/"+ uuid)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted());
+        @Test
+        public void getById_success() throws Exception {
 
-        Assertions.assertEquals(mockRecipe.getName(), mockRecipeDto.getName());
-    }
+            when(recipeService.findById(uuid)).thenReturn(mockRecipe);
 
-    @Test
-    public void getById_success() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipes/" + uuid)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", notNullValue()))
+                    .andExpect(jsonPath("$.name", is("Test Recipe name"))
+                    );
+        }
 
-        when(recipeService.findById(uuid)).thenReturn(mockRecipe);
+        @Test
+        public void update_success() throws Exception {
+            String json = objectMapper.writeValueAsString(mockRecipeDto);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/recipes/" + uuid)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.name", is("Test Recipe name")));
-    }
+            when(recipeService.findById(uuid)).thenReturn(mockRecipe);
+            when(recipeService.save(Mockito.any())).thenReturn(uuid);
 
-    @Test
-    public void deleteRecipeById() {
+            mockMvc.perform(put("/api/recipes/" + uuid)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isAccepted()
+                    );
+
+            Assertions.assertEquals(mockRecipe.getName(), mockRecipeDto.getName());
+        }
+
+        @Test
+        public void deleteRecipeById() throws Exception {
+
+            mockMvc.perform(delete("/api/recipes/" + uuid))
+                    .andExpect(status().isOk()
+                    );
+        }
     }
 
     @Nested
@@ -125,8 +139,9 @@ public class RecipeControllerTest {
         public void getByCategory_success() throws Exception {
             when(recipeService.findAllByRecipeCategoryId(uuid)).thenReturn(recipeList);
 
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/recipes/category?id=" + uuid)
-                    .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipes/category?id=" + uuid)
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(2)))
                     .andExpect(jsonPath("$[1]", aMapWithSize(RecipeThumbnailDto.class.getDeclaredFields().length)))
@@ -141,8 +156,9 @@ public class RecipeControllerTest {
             when(keywordService.findByName(optionalKeyword.get().getName())).thenReturn(optionalKeyword);
             when(recipeService.findAllByKeyword(optionalKeyword.get())).thenReturn(recipeList);
 
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/recipes/keyword?key=" + optionalKeyword.get().getName())
-                    .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipes/keyword?key=" + optionalKeyword.get().getName())
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(recipeList.size())))
                     .andExpect(jsonPath("$[1]", aMapWithSize(RecipeThumbnailDto.class.getDeclaredFields().length)))
@@ -154,13 +170,14 @@ public class RecipeControllerTest {
         public void getAllRecipes_success() throws Exception {
             when(recipeService.findAll()).thenReturn(recipeList);
 
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/recipes/all")
-                    .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipes/all")
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(recipeList.size())))
                     .andExpect(jsonPath("$[1]", aMapWithSize(RecipeThumbnailDto.class.getDeclaredFields().length)))
                     .andExpect(jsonPath("$[1].name", is(recipeList.get(1).getName()))
-                    );
+            );
         }
     }
 }
