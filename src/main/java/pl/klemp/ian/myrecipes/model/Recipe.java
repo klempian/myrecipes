@@ -1,15 +1,13 @@
 package pl.klemp.ian.myrecipes.model;
 
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 import pl.klemp.ian.myrecipes.converter.StringListConverter;
+import pl.klemp.ian.myrecipes.model.persistent.AbstractPersistentObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Builder
 @Getter
@@ -18,13 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Recipe {
-
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID id;
+public class Recipe extends AbstractPersistentObject {
 
     @NotNull
     private String name;
@@ -70,17 +62,4 @@ public class Recipe {
 
     @Convert(converter = StringListConverter.class)
     private List<String> recipeInstructions;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Recipe)) return false;
-        Recipe recipe = (Recipe) o;
-        return Objects.equals(this.getId(), recipe.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.getId());
-    }
 }
