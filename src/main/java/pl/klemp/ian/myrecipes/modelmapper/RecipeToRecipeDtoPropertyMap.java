@@ -1,5 +1,6 @@
 package pl.klemp.ian.myrecipes.modelmapper;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import pl.klemp.ian.myrecipes.dto.NutritionDto;
