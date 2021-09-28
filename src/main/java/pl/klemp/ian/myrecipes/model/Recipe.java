@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Builder
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Recipe {
 
