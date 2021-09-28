@@ -1,6 +1,6 @@
 package pl.klemp.ian.myrecipes.model;
 
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import pl.klemp.ian.myrecipes.converter.StringListConverter;
 
@@ -19,8 +19,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Recipe {
 
     @Id
@@ -32,7 +36,6 @@ public class Recipe {
     @NotNull
     private String name;
 
-    @NotNull
     @Column(name = "images")
     @Convert(converter = StringListConverter.class)
     private List<String> image;
@@ -73,5 +76,4 @@ public class Recipe {
 
     @Convert(converter = StringListConverter.class)
     private List<String> recipeInstructions;
-
 }
