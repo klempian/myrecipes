@@ -1,25 +1,40 @@
 package pl.klemp.ian.myrecipes.model.persistent;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.UUID;
 
 @MappedSuperclass
 public abstract class AbstractPersistentObject implements PersistentObject {
 
     @Id
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID id = UUID.randomUUID();
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @JsonIgnore
+    private Long id;
+
+    @JsonIgnore
+    @Column(unique = true, updatable = false, columnDefinition = "BINARY(16)")
+    private UUID uuid = UUID.randomUUID();
 
     @Override
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
     @Override
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    @Override
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     @Override
@@ -29,15 +44,15 @@ public abstract class AbstractPersistentObject implements PersistentObject {
 
         PersistentObject that = (PersistentObject) o;
 
-        if (id == null) return false;
+        if (uuid == null) return false;
 
-        return id.equals(that.getId());
+        return uuid.equals(that.getUuid());
     }
 
     @Override
     public int hashCode() {
-        if (id != null) {
-            return id.hashCode();
+        if (uuid != null) {
+            return uuid.hashCode();
         } else {
             return super.hashCode();
         }
@@ -46,6 +61,6 @@ public abstract class AbstractPersistentObject implements PersistentObject {
     @Override
     public String toString() {
         return this.getClass().getName()
-                + "[id=" + id + "]";
+                + "[uuid=" + uuid + "]";
     }
 }

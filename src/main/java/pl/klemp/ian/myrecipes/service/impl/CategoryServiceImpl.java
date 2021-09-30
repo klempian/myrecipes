@@ -9,7 +9,6 @@ import pl.klemp.ian.myrecipes.service.CategoryService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -23,8 +22,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findById(UUID id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Category.class, id));
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id);
     }
 
     @Override
@@ -33,8 +32,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> findByName(String name) {
-        return categoryRepository.findByName(name);
+    public Category findByName(String name) {
+        return categoryRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException(Category.class, "name", name));
     }
 
     @Override

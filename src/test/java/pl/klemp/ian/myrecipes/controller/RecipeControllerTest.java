@@ -12,8 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pl.klemp.ian.myrecipes.dto.RecipeDto;
 import pl.klemp.ian.myrecipes.dto.RecipeThumbnailDto;
+import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
+import pl.klemp.ian.myrecipes.service.CategoryService;
 import pl.klemp.ian.myrecipes.service.KeywordService;
 import pl.klemp.ian.myrecipes.service.RecipeService;
 
@@ -23,7 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,6 +43,8 @@ public class RecipeControllerTest {
     private RecipeService recipeService;
     @MockBean
     private KeywordService keywordService;
+    @MockBean
+    private CategoryService categoryService;
 
     private final UUID uuid = UUID.randomUUID();
     private static final RecipeDto mockRecipeDto = new RecipeDto();
@@ -78,7 +82,7 @@ public class RecipeControllerTest {
         @Test
         public void getById_success() throws Exception {
 
-            when(recipeService.findById(uuid)).thenReturn(mockRecipe);
+            when(recipeService.findByUuid(uuid)).thenReturn(mockRecipe);
 
             mockMvc.perform(MockMvcRequestBuilders
                             .get("/api/recipes/" + uuid)
@@ -93,7 +97,7 @@ public class RecipeControllerTest {
         public void update_success() throws Exception {
             String json = objectMapper.writeValueAsString(mockRecipeDto);
 
-            when(recipeService.findById(uuid)).thenReturn(mockRecipe);
+            when(recipeService.findByUuid(uuid)).thenReturn(mockRecipe);
             when(recipeService.save(Mockito.any())).thenReturn(uuid);
 
             mockMvc.perform(put("/api/recipes/" + uuid)
@@ -134,10 +138,13 @@ public class RecipeControllerTest {
 
         @Test
         public void getByCategory_success() throws Exception {
-            when(recipeService.findAllByRecipeCategoryId(uuid)).thenReturn(recipeList);
+            Category mockCategory = mock(Category.class);
+
+            when(categoryService.findByName(Mockito.any())).thenReturn(mockCategory);
+            when(recipeService.findAllByRecipeCategory(mockCategory)).thenReturn(recipeList);
 
             mockMvc.perform(MockMvcRequestBuilders
-                            .get("/api/recipes/category?id=" + uuid)
+                            .get("/api/recipes/category?name=" + Mockito.any())
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(2)))
@@ -148,13 +155,13 @@ public class RecipeControllerTest {
 
         @Test
         public void getByKeyword_success() throws Exception {
-            Optional<Keyword> optionalKeyword= Optional.of(new Keyword("test keyword"));
+            Keyword mockKeyword = mock(Keyword.class);
 
-            when(keywordService.findByName(optionalKeyword.get().getName())).thenReturn(optionalKeyword);
-            when(recipeService.findAllByKeyword(optionalKeyword.get())).thenReturn(recipeList);
+            when(keywordService.findByName(Mockito.any())).thenReturn(Optional.of(mockKeyword));
+            when(recipeService.findAllByKeyword(mockKeyword)).thenReturn(recipeList);
 
             mockMvc.perform(MockMvcRequestBuilders
-                            .get("/api/recipes/keyword?key=" + optionalKeyword.get().getName())
+                            .get("/api/recipes/keyword?name=" + Mockito.any())
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(recipeList.size())))

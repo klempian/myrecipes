@@ -1,25 +1,15 @@
 package pl.klemp.ian.myrecipes.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.Getter;
+import lombok.Setter;
+import pl.klemp.ian.myrecipes.model.persistent.AbstractPersistentObject;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
-public class Keyword {
-
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    @JsonIgnore
-    private UUID id;
+public class Keyword extends AbstractPersistentObject {
 
     private String name;
 

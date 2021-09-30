@@ -3,6 +3,7 @@ package pl.klemp.ian.myrecipes.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.klemp.ian.myrecipes.exception.EntityNotFoundException;
+import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
 import pl.klemp.ian.myrecipes.repository.RecipeRepository;
@@ -19,12 +20,12 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public UUID save(Recipe recipe) {
-        return recipeRepository.save(recipe).getId();
+        return recipeRepository.save(recipe).getUuid();
     }
 
     @Override
-    public Recipe findById(UUID id) {
-        return recipeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Recipe.class, id));
+    public Recipe findByUuid(UUID uuid) {
+        return recipeRepository.findByUuid(uuid).orElseThrow(() -> new EntityNotFoundException(Recipe.class, "id", uuid.toString()));
     }
 
     @Override
@@ -38,12 +39,12 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> findAllByRecipeCategoryId(UUID id) {
-        return recipeRepository.findAllByRecipeCategoryId(id);
+    public List<Recipe> findAllByRecipeCategory(Category category) {
+        return recipeRepository.findAllByRecipeCategory(category);
     }
 
     @Override
-    public void delete(UUID id) {
-        recipeRepository.delete(findById(id));
+    public void delete(UUID uuid) {
+        recipeRepository.delete(findByUuid(uuid));
     }
 }

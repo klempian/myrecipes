@@ -18,8 +18,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.klemp.ian.myrecipes.dto.RecipeDto;
 import pl.klemp.ian.myrecipes.dto.RecipeThumbnailDto;
 import pl.klemp.ian.myrecipes.dto.RecipeUpdateDto;
+import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
+import pl.klemp.ian.myrecipes.service.CategoryService;
 import pl.klemp.ian.myrecipes.service.KeywordService;
 import pl.klemp.ian.myrecipes.service.RecipeService;
 
@@ -38,20 +40,21 @@ public class RecipeController {
 
     private final RecipeService recipeService;
     private final KeywordService keywordService;
+    private final CategoryService categoryService;
     private final ModelMapper modelMapper;
 
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<Object> create(@RequestBody @Valid RecipeDto recipeDto) {
         Recipe recipe = modelMapper.map(recipeDto, Recipe.class);
-        UUID recipeId = recipeService.save(recipe);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{recipeId}").buildAndExpand(recipeId).toUri();
+        UUID recipeUuid = recipeService.save(recipe);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{recipeId}").buildAndExpand(recipeUuid).toUri();
 
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(value = "/{recipeId}", consumes = "application/json")
     public ResponseEntity<Object> update(@PathVariable UUID recipeId, @RequestBody @Valid RecipeUpdateDto recipeUpdateDto) {
-        Recipe recipe = recipeService.findById(recipeId);
+        Recipe recipe = recipeService.findByUuid(recipeId);
         modelMapper.map(recipeUpdateDto, recipe);
         recipeService.save(recipe);
 
@@ -61,23 +64,24 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{recipeId}")
     public RecipeDto getById(@PathVariable UUID recipeId) {
-        Recipe recipe = recipeService.findById(recipeId);
+        Recipe recipe = recipeService.findByUuid(recipeId);
         return modelMapper.map(recipe, RecipeDto.class);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/category")
-    public List<RecipeThumbnailDto> getByCategory(@RequestParam UUID id) {
+    public List<RecipeThumbnailDto> getByCategory(@RequestParam String name) {
+        Category category = categoryService.findByName(name);
 
-        return recipeService.findAllByRecipeCategoryId(id).stream()
+        return recipeService.findAllByRecipeCategory(category).stream()
                 .map(recipe -> modelMapper.map(recipe, RecipeThumbnailDto.class))
                 .collect(Collectors.toList());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/keyword")
-    public List<RecipeThumbnailDto> getByKeyword(@RequestParam String key) {
-        Optional<Keyword> optionalKeyword = keywordService.findByName(key);
+    public List<RecipeThumbnailDto> getByKeyword(@RequestParam String name) {
+        Optional<Keyword> optionalKeyword = keywordService.findByName(name);
 
         return optionalKeyword.map(keyword -> recipeService.findAllByKeyword(keyword).stream()
                 .map(recipe -> modelMapper.map(recipe, RecipeThumbnailDto.class))

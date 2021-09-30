@@ -11,9 +11,9 @@ import java.util.UUID;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-    Optional<Recipe> findById(UUID id);
+    Optional<Recipe> findByUuid(UUID id);
 
     List<Recipe> findAllByKeywordsContaining(Keyword keyword);
 
-    List<Recipe> findAllByRecipeCategoryId(UUID id);
+    List<Recipe> findAllByRecipeCategory(Category category);
 }

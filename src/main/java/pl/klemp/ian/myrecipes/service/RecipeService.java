@@ -1,5 +1,6 @@
 package pl.klemp.ian.myrecipes.service;
 
+import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
 
@@ -10,13 +11,13 @@ public interface RecipeService {
 
     UUID save(Recipe recipe);
 
-    Recipe findById(UUID id);
+    Recipe findByUuid(UUID uuid);
 
     List<Recipe> findAll();
 
     List<Recipe> findAllByKeyword(Keyword keyword);
 
-    List<Recipe> findAllByRecipeCategoryId(UUID id);
+    List<Recipe> findAllByRecipeCategory(Category category);
 
-    void delete(UUID id);
+    void delete(UUID uuid);
 }
