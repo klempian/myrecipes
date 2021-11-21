@@ -2,12 +2,15 @@ package pl.klemp.ian.myrecipes.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.klemp.ian.myrecipes.dto.RecipeDto;
 import pl.klemp.ian.myrecipes.exception.EntityNotFoundException;
 import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
 import pl.klemp.ian.myrecipes.repository.RecipeRepository;
 import pl.klemp.ian.myrecipes.service.RecipeService;
+import pl.klemp.ian.myrecipes.utils.scraper.ReaderSelector;
+import pl.klemp.ian.myrecipes.utils.scraper.reader.PageReader;
 
 import java.util.List;
 import java.util.UUID;
@@ -46,5 +49,12 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void delete(UUID uuid) {
         recipeRepository.delete(findByUuid(uuid));
+    }
+
+    @Override
+    public RecipeDto getRecipeFromUrl(String url) {
+        ReaderSelector readerSelector = new ReaderSelector(url);
+        PageReader reader = readerSelector.select();
+        return reader.getRecipe();
     }
 }

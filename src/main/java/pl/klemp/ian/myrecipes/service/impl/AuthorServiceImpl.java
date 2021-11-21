@@ -41,7 +41,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author findByUrlOrNameOrCreate(String url, String name) { return authorRepository.findByUrlOrName(url, name)
+    public Author findByUrlAndNameOrCreate(String url, String name) { return authorRepository.findByUrlAndName(url, name)
             .orElseGet(() -> save(new Author(name, url))); }
 
     @Override

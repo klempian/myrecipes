@@ -36,11 +36,11 @@ public class Recipe extends AbstractPersistentObject {
 
     private String recipeCuisine;
 
-    private int prepTime;
+    private Integer prepTime;
 
-    private int cookTime;
+    private Integer cookTime;
 
-    private int totalTime;
+    private Integer totalTime;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "recipes_keywords",

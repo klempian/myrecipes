@@ -1,5 +1,6 @@
 package pl.klemp.ian.myrecipes.service;
 
+import pl.klemp.ian.myrecipes.dto.RecipeDto;
 import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
@@ -20,4 +21,6 @@ public interface RecipeService {
     List<Recipe> findAllByRecipeCategory(Category category);
 
     void delete(UUID uuid);
+
+    RecipeDto getRecipeFromUrl(String url);
 }

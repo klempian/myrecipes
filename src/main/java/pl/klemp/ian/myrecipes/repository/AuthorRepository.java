@@ -12,4 +12,6 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     Optional<Author> findByUrl(String url);
 
     Optional<Author> findByUrlOrName(String url, String name);
+
+    Optional<Author> findByUrlAndName(String url, String name);
 }

@@ -1,6 +1,5 @@
 package pl.klemp.ian.myrecipes.modelmapper;
 
-import org.modelmapper.Conditions;
 import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import pl.klemp.ian.myrecipes.dto.RecipeDto;
@@ -54,7 +53,7 @@ public class RecipeDtoToRecipePropertyMap extends PropertyMap<RecipeDto, Recipe>
         String authorName = author.getName();
         String authorUrl = author.getUrl();
 
-        return authorService.findByUrlOrNameOrCreate(authorUrl, authorName);
+        return authorService.findByUrlAndNameOrCreate(authorUrl, authorName);
     };
 
     Converter<List<String>, List<Keyword>> convertKeywords = mappingContext -> {

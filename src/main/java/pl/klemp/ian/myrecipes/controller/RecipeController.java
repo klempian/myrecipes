@@ -102,4 +102,11 @@ public class RecipeController {
     public void deleteRecipeById(@PathVariable UUID id) {
         recipeService.delete(id);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get")
+    public RecipeDto getRecipeFromUrl(@RequestParam String url) {
+
+        return recipeService.getRecipeFromUrl(url);
+    }
 }

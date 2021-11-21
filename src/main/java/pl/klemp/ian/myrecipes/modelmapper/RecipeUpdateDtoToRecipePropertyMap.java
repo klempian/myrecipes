@@ -3,13 +3,10 @@ package pl.klemp.ian.myrecipes.modelmapper;
 import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.spi.MappingContext;
-import pl.klemp.ian.myrecipes.dto.RecipeDto;
 import pl.klemp.ian.myrecipes.dto.RecipeUpdateDto;
-import pl.klemp.ian.myrecipes.model.Author;
 import pl.klemp.ian.myrecipes.model.Category;
 import pl.klemp.ian.myrecipes.model.Keyword;
 import pl.klemp.ian.myrecipes.model.Recipe;
-import pl.klemp.ian.myrecipes.service.AuthorService;
 import pl.klemp.ian.myrecipes.service.CategoryService;
 import pl.klemp.ian.myrecipes.service.KeywordService;
 

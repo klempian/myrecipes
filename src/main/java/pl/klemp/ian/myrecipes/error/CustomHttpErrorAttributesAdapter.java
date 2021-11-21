@@ -27,11 +27,9 @@ import java.util.stream.Collectors;
  *         "code": http_status_code,
  *         "errors": [
  *             {
- *                 "path": "the_path (optional)",
  *                 "code": "the_app_error_code",
- *                 "name": "value" (optional)
- *                 ..
- *                 "message": "the_message"
+ *                 "message": "the_message",
+ *                 etc.
  *             }
  *         ]
  *     }

@@ -17,7 +17,7 @@ public interface AuthorService {
 
     Optional<Author> findByUrl(String url);
 
-    Author findByUrlOrNameOrCreate(String url, String name);
+    Author findByUrlAndNameOrCreate(String url, String name);
 
     void delete(Author author);
 }

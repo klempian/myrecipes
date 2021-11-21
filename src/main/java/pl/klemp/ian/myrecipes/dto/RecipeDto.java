@@ -1,7 +1,6 @@
 package pl.klemp.ian.myrecipes.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import pl.klemp.ian.myrecipes.model.Author;
 
 import javax.validation.constraints.NotNull;
@@ -9,6 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class RecipeDto {
@@ -26,11 +28,11 @@ public class RecipeDto {
 
     private String recipeCuisine;
 
-    private int prepTime;
+    private Integer prepTime;
 
-    private int cookTime;
+    private Integer cookTime;
 
-    private int totalTime;
+    private Integer totalTime;
 
     private List<String> keywords;
 
