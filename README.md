@@ -2,11 +2,20 @@
 
 App for collecting recipes
 
-##
-* Spring REST API
-* ModelMapper
+Recipes can be added manually or scraped from a website.
 
-### TO DO
-* switch to JSON-LD
+## Latest features
+* scraping methods for individual website's can now be easily added in separate classes
+
+### Under construction
+* scraping recipes from JSON-LD schema
+
+### Coming soon
+* RDFa and Microdata
 * add users and Security
-* add recipe parser
+
+##
+** Spring REST API
+** ModelMapper
+** Schema.org
+** JSON-LD
